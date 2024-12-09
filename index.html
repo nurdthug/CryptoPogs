@@ -98,12 +98,15 @@
 </head>
 <body>
 
-<div class="container">
+<header class="container">
     <h1>Crypto Pogs</h1>
+</header>
+
+<main class="container">
     <div class="pog-grid" id="pogGrid">
         <!-- Pog cards will be dynamically rendered here -->
     </div>
-</div>
+</main>
 
 <!-- Modal for Pog Details -->
 <div id="pogModal" class="modal">
@@ -125,7 +128,7 @@
     // Fetch and display pogs
     async function fetchCryptoData() {
         try {
-            const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=20&page=1');
+            const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1');
             cryptoData = await response.json();
             renderPogs(cryptoData);
         } catch (error) {
