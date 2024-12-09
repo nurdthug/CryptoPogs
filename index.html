@@ -386,7 +386,7 @@ function renderPogs(pogs) {
     
     const formattedDate = pog.genesis_date ? 
       new Date(pog.genesis_date).toLocaleDateString() : 
-      'Launch date unknown';
+      ''; // Empty if no date available.
 
     card.innerHTML = `
       <div class="pog-image">
@@ -396,7 +396,7 @@ function renderPogs(pogs) {
       <p>${pog.symbol.toUpperCase()}</p>
       <div class="stats">
         <span>Rank #${pog.market_cap_rank || 'N/A'}</span>
-        <span>${formattedDate}</span>
+        ${formattedDate ? `<span>${formattedDate}</span>` : ''}
       </div>
     `;
     pogGrid.appendChild(card);
