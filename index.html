@@ -16,170 +16,208 @@
     <link rel="icon" href="https://github.com/nurdthug/CryptoPogs/blob/main/favicon.png?raw=true" type="image/png">
 
     <style>
-        :root {
-            --primary: #6d28d9;
-            --secondary: #4c1d95;
-            --accent: #10b981;
-            --background: #1a1a2e;
-            --text: #e5e7eb;
-        }
+    :root {
+      --primary: #6d28d9;
+      --secondary: #4c1d95;
+      --accent: #10b981;
+      --background: #1a1a2e;
+      --text: #e5e7eb;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--background);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    
+    .header {
+      background: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(8px);
+      position: fixed;
+      width: 100%;
+      z-index: 100;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--background);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
+    .pog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2rem;
+      padding: 2rem 0;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
+    .pog-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+    }
 
-        .pog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
-        }
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .pog-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-        }
+    .modal-content {
+      background: var(--background);
+      color: var(--text);
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      text-align: left;
+    }
 
-        .pog-card:hover {
-            transform: translateY(-5px);
-            transition: transform 0.3s ease;
-        }
+    .modal-content h2 {
+      margin-top: 0;
+    }
 
-        /* Modal Styles */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: var(--background);
-            color: var(--text);
-            padding: 2rem;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            text-align: left;
-        }
-
-        .modal-content h2 {
-            margin-top: 0;
-        }
-
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
     </style>
 </head>
 <body>
-
-<header class="container">
-    <h1>Crypto Pogs</h1>
+    
+<header class="header">
+  <nav class="nav container">
+    <div class="logo">CryptoPogs</div>
+    <div class="wallet-connect">
+      <button class="cta-button" id="connectWallet">Connect Wallet</button>
+    </div>
+  </nav>
 </header>
 
-<main class="container">
+<main>
+  <section class="pog-gallery container">
+    <h2>Featured Pogs</h2>
     <div class="pog-grid" id="pogGrid">
-        <!-- Pog cards will be dynamically rendered here -->
+      <!-- Pog cards will be dynamically inserted here -->
     </div>
+  </section>
 </main>
 
 <!-- Modal for Pog Details -->
 <div id="pogModal" class="modal">
-    <div class="modal-content">
-        <span id="closeModal" class="close">&times;</span>
-        <h2 id="pogName"></h2>
-        <p><strong>Symbol:</strong> <span id="pogSymbol"></span></p>
-        <p><strong>Market Cap Rank:</strong> <span id="pogRank"></span></p>
-        <p><strong>Launch Date:</strong> <span id="pogLaunchDate"></span></p>
-        <p><strong>Current Price:</strong> $<span id="pogPrice"></span></p>
-        <p><strong>24h Change:</strong> <span id="pogChange"></span>%</p>
-        <p><strong>Description:</strong> <span id="pogDescription"></span></p>
-    </div>
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <h2 id="pogName"></h2>
+    <p><strong>Symbol:</strong> <span id="pogSymbol"></span></p>
+    <p><strong>Market Cap Rank:</strong> <span id="pogRank"></span></p>
+    <p><strong>Launch Date:</strong> <span id="pogLaunchDate"></span></p>
+    <p><strong>Current Price:</strong> $<span id="pogPrice"></span></p>
+    <p><strong>24h Change:</strong> <span id="pogChange"></span>%</p>
+    <p><strong>Description:</strong> <span id="pogDescription"></span></p>
+  </div>
 </div>
 
 <script>
-    let cryptoData = [];
-
-    // Fetch and display pogs
-    async function fetchCryptoData() {
-        try {
-            const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1');
-            cryptoData = await response.json();
-            renderPogs(cryptoData);
-        } catch (error) {
-            console.error('Error fetching cryptocurrency data:', error);
-        }
+  const connectWallet = async () => {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        document.getElementById('connectWallet').textContent = `${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`;
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+      }
+    } else {
+      alert('MetaMask is required to use this feature!');
     }
+  };
 
-    function renderPogs(pogs) {
-        const pogGrid = document.getElementById('pogGrid');
-        pogGrid.innerHTML = '';
+  document.getElementById('connectWallet').addEventListener('click', connectWallet);
 
-        pogs.forEach(pog => {
-            const card = document.createElement('div');
-            card.className = 'pog-card';
-            card.innerHTML = `
-                <img src="${pog.image}" alt="${pog.name}" style="width: 100px; height: 100px; margin-bottom: 1rem;">
-                <h3>${pog.name}</h3>
-                <p>${pog.symbol.toUpperCase()}</p>
-            `;
-
-            card.addEventListener('click', () => showPogDetails(pog.id));
-            pogGrid.appendChild(card);
-        });
+  const fetchCryptoData = async () => {
+    try {
+      const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1');
+      const data = await response.json();
+      renderPogs(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
+  };
 
-    async function showPogDetails(id) {
-        const modal = document.getElementById('pogModal');
-        modal.style.display = 'flex';
-
-        try {
-            const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
-            const data = await response.json();
-
-            document.getElementById('pogName').textContent = data.name;
-            document.getElementById('pogSymbol').textContent = data.symbol.toUpperCase();
-            document.getElementById('pogRank').textContent = data.market_cap_rank || 'N/A';
-            document.getElementById('pogLaunchDate').textContent = data.genesis_date || 'Unknown';
-            document.getElementById('pogPrice').textContent = data.market_data.current_price.usd.toFixed(2);
-            document.getElementById('pogChange').textContent = data.market_data.price_change_percentage_24h?.toFixed(2) || '0.00';
-            document.getElementById('pogDescription').textContent = data.description.en || 'No description available.';
-        } catch (error) {
-            console.error('Error fetching pog details:', error);
-        }
-    }
-
-    document.getElementById('closeModal').addEventListener('click', () => {
-        document.getElementById('pogModal').style.display = 'none';
+  const renderPogs = (pogs) => {
+    const pogGrid = document.getElementById('pogGrid');
+    pogGrid.innerHTML = '';
+    pogs.forEach((pog) => {
+      const card = document.createElement('div');
+      card.className = 'pog-card';
+      card.innerHTML = `
+        <img src="${pog.image}" alt="${pog.name}" style="width: 100px; height: 100px;">
+        <h3>${pog.name}</h3>
+        <p>${pog.symbol.toUpperCase()}</p>
+      `;
+      card.addEventListener('click', () => showPogDetails(pog.id));
+      pogGrid.appendChild(card);
     });
+  };
 
-    // Initialize the app
-    document.addEventListener('DOMContentLoaded', fetchCryptoData);
+  const showPogDetails = async (id) => {
+    const modal = document.getElementById('pogModal');
+    modal.style.display = 'flex';
+    try {
+      const response = await fetch(`https://api.coingecko.com/api/v3/coins/${id}`);
+      const data = await response.json();
+      document.getElementById('pogName').textContent = data.name;
+      document.getElementById('pogSymbol').textContent = data.symbol.toUpperCase();
+      document.getElementById('pogRank').textContent = data.market_cap_rank || 'N/A';
+      document.getElementById('pogLaunchDate').textContent = data.genesis_date || 'Unknown';
+      document.getElementById('pogPrice').textContent = data.market_data.current_price.usd.toFixed(2);
+      document.getElementById('pogChange').textContent = data.market_data.price_change_percentage_24h?.toFixed(2) || '0.00';
+      document.getElementById('pogDescription').textContent = data.description.en || 'No description available.';
+    } catch (error) {
+      console.error('Error fetching details:', error);
+    }
+  };
+
+  document.getElementById('closeModal').addEventListener('click', () => {
+    document.getElementById('pogModal').style.display = 'none';
+  });
+
+  document.addEventListener('DOMContentLoaded', fetchCryptoData);
 </script>
 
 </body>
